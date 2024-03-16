@@ -1,73 +1,73 @@
 const mongodb = require("../data/database.js")
 const createObjectId = require('mongodb').ObjectId.createFromHexString;
 
-const getstudent = async (req, res) => {
+const getContact = async (req, res) => {
     //#swagger.tags=['Users']
     const userId = createObjectId(req.params.id);
-    const result = await mongodb.getDb().db("project2").collection('student').find({_id: userId});
+    const result = await mongodb.getDb().db("project1").collection('contact').find({_id: userId});
     result.toArray().then((lists) => {
         res.setHeader('Content-Type', 'application/json');
         res.status(200).json(lists[0]);
     })
 }
 
-const getAllStudents = async (req, res) => {
+const getAllContacts = async (req, res) => {
     //#swagger.tags=['Users']
-    const result = await mongodb.getDb().db("project2").collection('student').find();
+    const result = await mongodb.getDb().db("project1").collection('contact').find();
     result.toArray().then((lists) => {
         res.setHeader('Content-Type', 'application/json');
         res.status(200).json(lists);
     })
 }
 
-const createStudent = async (req, res) => {
+const createContact = async (req, res) => {
     //#swagger.tags=['Users']
-    const student = {
+    const contact = {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
-        studentId: req.body.studentId,
+        favoriteColor: req.body.favoriteColor,
         birthday: req.body.birthday
     };
 
-    const response = await mongodb.getDb().db("project2").collection('student').insertOne(student);
+    const response = await mongodb.getDb().db("project1").collection('contact').insertOne(contact);
     if(response.acknowledged){
     res.status(200).json(response)
     }
     else{res.status(500).json(response.error || 'There has been an error')}
 }
 
-const updatestudent = async (req, res) => {
+const updateContact = async (req, res) => {
     //#swagger.tags=['Users']
     const userId = createObjectId(req.params.id);
-    const student = {
+    const contact = {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
-        studentId: req.body.studentId,
+        favoriteColor: req.body.favoriteColor,
         birthday: req.body.birthday
     }
 
-    const response = await mongodb.getDb().db("project2").collection('student').replaceOne({_id: userId}, student);
+    const response = await mongodb.getDb().db("project1").collection('contact').replaceOne({_id: userId}, contact);
     if(response.acknowledged){
     res.status(200).json(response)
     }
     else{res.status(500).json(response.error || 'There has been an error')}
 }
 
-const deletestudent = async (req, res) => {
+const deleteContact = async (req, res) => {
     //#swagger.tags=['Users']
     const userId = createObjectId(req.params.id);
-    const response = await mongodb.getDb().db("project2").collection('student').deleteOne({_id: userId});
+    const response = await mongodb.getDb().db("project1").collection('contact').deleteOne({_id: userId});
     if(response.acknowledged){
     res.status(200).json(response)
     }
     else{res.status(500).json(response.error || 'There has been an error')}
 }
 module.exports = {
-    getstudent,
-    getAllstudents,
-    createstudent,
-    updatestudent,
-    deletestudent
+    getContact,
+    getAllContacts,
+    createContact,
+    updateContact,
+    deleteContact
 }
